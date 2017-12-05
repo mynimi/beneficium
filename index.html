@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="expires" content="43200">
+    <title>Title - Subtitle</title>
+    <meta name="description" content="#{page.description}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="#{page.author}">
+    <meta name="keywords" content="#{page.tags}">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <!-- head end-->
+  <body>
+    <div class="container">
+      <h1>Konfiguration</h1>
+      <form>
+        <label>Anzahl Spieler (2 - 4)
+          <input type="number" name="playercount" id="playercount" value="3" min="2" max="4">
+        </label><br>
+        <label>Total Geld zu verteilen
+          <input type="number" name="total" id="total" value="1000">
+        </label><br>
+        <label>Minimales Vermögen ärmster Spieler
+          <input type="number" name="minimum" id="minimum" value="100">
+        </label><br>
+        <p>Geldverteilung</p>
+        <label> 
+          <input type="radio" name="distrib" value="fair">keine Ungleichheit (jeder Spieler erhält gleich viel Startkapital)
+        </label><br>
+        <label> 
+          <input type="radio" name="distrib" value="small">kleine Ungleichheit (40% - 60% des Geldes geht an den reichsten Spieler)
+        </label><br>
+        <label> 
+          <input type="radio" name="distrib" value="large" checked>grosse Ungleichheit (70% - 90% des Geldes geht an reichsten Spieler)
+        </label><br>
+        <input class="generate" type="button" value="generiere Spieler">
+      </form><a class="btn" href="result.html">Test</a>
+    </div>
+    <!-- development (do not ship this)-->
+    <script src="/js/jquery-3.1.1.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- production (compile scripts.min.js before shipping)-->
+    <!-- script(src="/js/scripts.min.js")-->
+  </body>
+  <!-- body end-->
+</html>
+<!-- html end-->
