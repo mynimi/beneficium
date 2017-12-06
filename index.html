@@ -14,9 +14,13 @@
     <div class="container">
       <h1>Konfiguration</h1>
       <form>
-        <label>Anzahl Spieler (2 - 4)
-          <input type="number" name="playercount" id="playercount" value="3" min="2" max="4">
-        </label><br>
+        <label>Anzahl Spieler</label>
+        <select id="playercount">
+          <option>Anzahl Spieler</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4        </option>
+        </select><br>
         <label>Total Geld zu verteilen
           <input type="number" name="total" id="total" value="1000">
         </label><br>
@@ -33,6 +37,7 @@
       </form>
     </div>
     <!-- development (do not ship this)-->
+    <script src="/js/json2.js"></script>
     <script src="/js/jquery-3.1.1.js"></script>
     <script src="/js/main.js"></script>
     <!-- production (compile scripts.min.js before shipping)-->

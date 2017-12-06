@@ -4,12 +4,14 @@ $(document).ready(function(){
 
     // when generate button on index is clicked, HTML is built which will be appended in the results page
     $('.generate').click(function(){
+        // get values from form
         playercount = parseInt($('#playercount').val());
         total = parseInt($('#total').val());
         distrib = $('input[name="distrib"]:checked').val();
 
         // sessionStorage.getItem("Test");
-        // sessionStorage.setItem("Test",playercount);
+        // sessionStorage.setItem("Test",playercount
+        // empty sessionstorages for new generating
         sessionStorage.pl = '';
 
         if(playercount != null && total != null && distrib != null){
@@ -76,8 +78,6 @@ $(document).ready(function(){
             // find glückspilz ID
             lucky = Math.floor(Math.random() * playercount) + 1;
 
-            $('#results').append('<p>Ungleichheitsfaktor: '+percentRich+'%</p>');
-
             // generate div container for every player
             for (i = 0; i < playercount; i++) {
                 player = {};
@@ -128,7 +128,11 @@ $(document).ready(function(){
                 // $('#results').append(pl);
                 sessionStorage.pl += pl;
 
+
+
             }
+            setCookie('players', players, 1);
+            setCookie("players", JSON.stringify(players), 1);
             // console.log(players);
             // console.log(players['player1'].Kontostand);
         } else{
@@ -137,7 +141,15 @@ $(document).ready(function(){
     });
 
     $('#results').append(sessionStorage.getItem("pl"));
-    console.log(sessionStorage.getItem("pl"));
+    console.log(JSON.parse(getCookie("players")));
+
+    // later on...
+    // var people = $.parseJSON(getCookie("players"));
+    // people.push(
+    //     { 'name' : 'Daniel', 'age' : 4 }
+    // );
+    // $.cookie("people", JSON.stringify(people));
+
 });
 
 function getRandom5(min, max) {
@@ -145,4 +157,27 @@ function getRandom5(min, max) {
 }
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
