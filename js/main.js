@@ -131,186 +131,20 @@ $(document).ready(function(){
     var players = JSON.parse(getCookie("players"));
     generatePlayers('#results');
 
-    function overlayOpener(name){
-        $('#results').on('click', '.'+name, function (){
-            p = $(this).parent().attr('class');
-            c = $(this).attr('class').replace('btn', '').replace(' ', '');
-            $('#'+name+' .playerholder').data('is-player', p);
-            $('#'+name+' .playerholder').text(p);
-            openOverlay(c);
-        });
-    }
     overlayOpener('paybank');
+    moneyAction('paybank');
 
-    // $('#results').on('click', '.paybank', function (){
-    //     p = $(this).parent().attr('class');
-    //     c = $(this).attr('class').replace('btn', '').replace(' ', '');
-    //     $('#paybank .playerholder').data('is-player', p);
-    //     $('#paybank .playerholder').text(p);
-    //     openOverlay(c);
-    // });
-    $('#paybank .done').click(function(){
-        var isPlayer = $('#paybank .playerholder').data('is-player');
-            p = players[isPlayer],
-            m = parseInt(p.Kontostand),
-            n = $('#paybankNumber').val();
-            t = $('#paybankType').val(),
-            r;
+    overlayOpener('buydice');
+    moneyAction('buydice', 'substract', false, true, getCookie('dicePrice'));
 
-        if(n != '' && t != ''){
-            var r;
-            if(t == '%'){
-                r = (m/100)*n;
-            }
-            if(t == 'x'){
-                var dp = parseInt(getCookie('dicePrice'));
-                r = n*dp;
-            }
-        } else{
-            alert("Bitte fülle alle Felder aus");
-        }
+    overlayOpener('buydiceresult');
+    moneyAction('buydiceresult', 'substract', false, true, getCookie('diceResult'));
 
-        p["Kontostand"] = m - r;
+    overlayOpener('getmoney');
+    moneyAction('getmoney', 'add');
 
-        setCookie("players", JSON.stringify(players), 1);
-        players = JSON.parse(getCookie("players"));
-
-        generatePlayers('#results');
-        closeOverlay();
-    });
-
-    $('#results').on('click', '.buydice', function (){
-        p = $(this).parent().attr('class');
-        c = $(this).attr('class').replace('btn', '').replace(' ', '');
-        $('#buydice .playerholder').data('is-player', p);
-        $('#buydice .playerholder').text(p);
-        openOverlay(c);
-    });
-    $('#buydice .done').click(function(){
-        var isPlayer = $('#buydice .playerholder').data('is-player');
-            p = players[isPlayer],
-            m = parseInt(p.Kontostand),
-            r = getCookie('dicePrice');
-
-        p["Kontostand"] = m - r;
-
-        setCookie("players", JSON.stringify(players), 1);
-        players = JSON.parse(getCookie("players"));
-
-        generatePlayers('#results');
-        closeOverlay();
-    });
-
-    $('.buydiceresult').click(function(){
-        p = $(this).parent().attr('class');
-        c = $(this).attr('class').replace('btn', '').replace(' ', '');
-        $('#buydiceresult .playerholder').data('is-player', p);
-        $('#buydiceresult .playerholder').text(p);
-        openOverlay(c);
-    });
-    $('#buydiceresult .done').click(function(){
-        var isPlayer = $('#buydiceresult .playerholder').data('is-player');
-            p = players[isPlayer],
-            m = parseInt(p.Kontostand),
-            r = getCookie('diceResult');
-
-        p["Kontostand"] = m - r;
-
-        setCookie("players", JSON.stringify(players), 1);
-        players = JSON.parse(getCookie("players"));
-
-        generatePlayers('#results');
-        closeOverlay();
-    });
-
-    $('.getmoney').click(function(){
-        p = $(this).parent().attr('class');
-        c = $(this).attr('class').replace('btn', '').replace(' ', '');
-        $('#getmoney .playerholder').data('is-player', p);
-        $('#getmoney .playerholder').text(p);
-        openOverlay(c);
-    });
-    $('#getmoney .done').click(function(){
-        var isPlayer = $('#getmoney .playerholder').data('is-player');
-            p = players[isPlayer],
-            m = parseInt(p.Kontostand),
-            n = $('#getmoneyNumber').val();
-            t = $('#getmoneyType').val(),
-            r;
-
-        if(n != '' && t != ''){
-            var r;
-            if(t == '%'){
-                r = (m/100)*n;
-            }
-            if(t == 'x'){
-                var dp = parseInt(getCookie('dicePrice'));
-                r = n*dp;
-            }
-        } else{
-            alert("Bitte fülle alle Felder aus");
-        }
-
-        p["Kontostand"] = m + r;
-
-        setCookie("players", JSON.stringify(players), 1);
-        players = JSON.parse(getCookie("players"));
-
-        generatePlayers('#results');
-        closeOverlay();
-    });
-
-    $('.payplayer').click(function(){
-        p = $(this).parent().attr('class');
-        c = $(this).attr('class').replace('btn', '').replace(' ', '');
-        $('#payplayer .playerholder').data('is-player', p);
-        $('#payplayer .playerholder').text(p);
-        openOverlay(c);
-        $('.playerlist option').each(function(){
-            if($(this).val() == p){
-                $(this).hide();
-            } else{
-                $(this).show();
-            }
-        });
-    });
-    $('#payplayer .done').click(function(){
-        var isPlayer = $('#payplayer .playerholder').data('is-player');
-            p = players[isPlayer],
-            m = parseInt(p.Kontostand),
-            n = $('#payplayerNumber').val();
-            t = $('#payplayerType').val(),
-            w = $('#payplayer .playerlist select option:selected').val();
-        var r;
-        var u;
-
-        if(n != '' && t != '' && w != ''){
-            if(t == '%'){
-                r = (m/100)*n;
-            }
-            if(t == 'x'){
-                var dp = parseInt(getCookie('dicePrice'));
-                r = n*dp;
-            }
-            u = players[w];
-            console.log(p["Kontostand"]);
-            console.log(u["Kontostand"]);
-            console.log(n);
-            console.log(t);
-            console.log(w);
-        } else{
-            alert("Bitte fülle alle Felder aus");
-        }
-
-        p["Kontostand"] = m - r;
-        u["Kontostand"] = m + r;
-
-        setCookie("players", JSON.stringify(players), 1);
-        players = JSON.parse(getCookie("players"));
-
-        generatePlayers('#results');
-        closeOverlay();
-    });
+    overlayOpener('payplayer');
+    moneyAction('payplayer', 'substract', true);
 
     $('.playerlist').each(function(){
         var s = '<select id="#playerlist">';
@@ -339,12 +173,77 @@ $(document).ready(function(){
     $('body').on('click touchstart', '.overlay-backdrop', function(){
         closeOverlay();
     });
-
     $(document).keyup(function(e) {
         if (e.keyCode === 27){
             closeOverlay();
         }
     });
+
+    function overlayOpener(name){
+        $('#results').on('click', '.'+name, function (){
+            p = $(this).parent().attr('class');
+            c = $(this).attr('class').replace('btn', '').replace(' ', '');
+            $('#'+name+' .playerholder').data('is-player', p);
+            $('#'+name+' .playerholder').text(p);
+            openOverlay(c);
+            $('.playerlist option').each(function(){
+                if($(this).val() == p){
+                    $(this).hide();
+                } else{
+                    $(this).show();
+                }
+            });
+        });
+    }
+
+    function moneyAction(container, operation = 'substract',  recipient = false, short = false, shortValue = false){
+        $('#'+container+' .done').click(function(){
+            var isPlayer = $('#'+container+' .playerholder').data('is-player');
+                p = players[isPlayer],
+                m = parseInt(p.Kontostand),
+                n = $('#'+container+'Number').val(),
+                t = $('#'+container+'Type').val();
+            if(recipient){
+                var w = $('#'+container+' .playerlist select option:selected').val();
+                var u;
+            }
+            var r;
+            if(short){
+                r = shortValue;
+            }
+
+            if(!short){
+                if(n != '' && t != '' && w != ''){
+                    if(t == '%'){
+                        r = (m/100)*n;
+                    }
+                    if(t == 'x'){
+                        var dp = parseInt(getCookie('dicePrice'));
+                        r = n*dp;
+                    }
+                    if(recipient){
+                        u = players[w];
+                    }
+                } else{
+                    alert("Bitte fülle alle Felder aus");
+                }
+            }
+
+            if(operation == 'substract' || recipient){
+                p["Kontostand"] = m - r;
+            } else {
+                p["Kontostand"] = m + r;
+            }
+            if(recipient){
+                u["Kontostand"] = m + r;
+            }
+            setCookie("players", JSON.stringify(players), 1);
+            players = JSON.parse(getCookie("players"));
+
+            generatePlayers('#results');
+            closeOverlay();
+        });
+    }
 
     function openOverlay(c) {
         $('#'+c).fadeIn();
