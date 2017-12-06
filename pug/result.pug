@@ -1,16 +1,16 @@
-- var page = { title: "Title", subtitle: "Subtitle", author: "author", description: "description", tags: ["tag1", "tag2", "tag3"] }
+extends layout.pug
 
-doctype html
-html(lang="de")
-    include includes/head.pug
-
-    body
-        .container
-            #test
-
-            #results
-                h1 Resultate
-
-        include includes/footer.pug
-    // body end
-// html end
+block content
+    #results
+        h1 Resultate
+        
+    .paybank
+        h1 Zahlung Tätigen an Bank
+    .payplayer
+        h1 Zahlung an anderen Spieler
+    .addmoney
+        h1 Erhält Zahlung
+    .buydice
+        h1 Wurf kaufen
+    .buydiceresult
+        h1 Würfelergebnis kaufen

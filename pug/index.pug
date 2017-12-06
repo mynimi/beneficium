@@ -1,13 +1,25 @@
-- var page = { title: "Title", subtitle: "Subtitle", author: "author", description: "description", tags: ["tag1", "tag2", "tag3"] }
+extends layout.pug
 
-doctype html
-html(lang="de")
-    include includes/head.pug
-
-    body
-        .container
-            include includes/step1.pug
-
-        include includes/footer.pug
-    // body end
-// html end
+block content
+    h1 Konfiguration
+    form
+        label Anzahl Spieler (2 - 4)
+            input(type="number" name="playercount" id="playercount" value="3" min="2" max="4")
+        br
+        label Total Geld zu verteilen
+            input(type="number" name="total" id="total" value="1000")
+        br
+        p Geldverteilung
+        label 
+            input(type="radio" name="distrib" value="fair")
+            | keine Ungleichheit (jeder Spieler erhält gleich viel Startkapital)
+        br
+        label 
+            input(type="radio" name="distrib" value="small")
+            | kleine Ungleichheit (40% - 60% des Geldes geht an den reichsten Spieler)
+        br
+        label 
+            input(type="radio" name="distrib" value="large" checked)
+            | grosse Ungleichheit (70% - 85% des Geldes geht an reichsten Spieler)
+        br
+        a(class="button generate" href="result.html") generiere Spieler

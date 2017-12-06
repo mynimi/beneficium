@@ -1,40 +1,58 @@
 $(document).ready(function(){
-    var playercount,
-        total,
-        minimum,
-        distrib,
-        players = {},
-        percentRich;
+    // init variables
+    var playercount, total, distrib, players = {}, percentRich, richest, poorest, second, third, richTotal, remainder, poorestTotal, secondTotal, thirdTotal;
 
-    $('#test').append(sessionStorage.getItem("Test"));
-    $('#results').append(sessionStorage.getItem("pl"));
-
+    // when generate button on index is clicked, HTML is built which will be appended in the results page
     $('.generate').click(function(){
         playercount = parseInt($('#playercount').val());
         total = parseInt($('#total').val());
-        minimum = parseInt($('#minimum').val());
         distrib = $('input[name="distrib"]:checked').val();
 
-        console.log(sessionStorage.Test = playercount);
         // sessionStorage.getItem("Test");
         // sessionStorage.setItem("Test",playercount);
         sessionStorage.pl = '';
 
-        if(playercount != null && total != null && minimum != null && distrib != null){
+        if(playercount != null && total != null && distrib != null){
             // find difference between poor and rich
             if(distrib == 'fair'){
                 percentRich = 100/playercount;
             } else if (distrib == 'small') {
                 percentRich = getRandom5(40, 60);
             } else if (distrib == 'large') {
-                percentRich = getRandom5(70, 90);
+                percentRich = getRandom5(70, 85);
             }
 
-            percentRich = percentRich/100;
-
             richest = Math.floor(Math.random() * playercount) + 1;
-            poorest = Math.floor(Math.random() * playercount) + 1;
+            richTotal = Math.round(total*(percentRich/100));
 
+            remainder = 100 - percentRich;
+
+            if(playercount == 2){
+                poorestTotal = remainder;
+            }
+            if(playercount > 2){
+                var totals = [];
+                totals.push(getRandom5(5, remainder - 5));
+                totals.push(remainder - totals[0]);
+                totals.sort(function(a, b){return b-a}); // sort in ascending order
+
+                secondTotal = Math.round(total*(totals[0]/100));
+                poorestTotal = Math.round(total*(totals[1]/100));
+            }
+            if(playercount > 3){
+                var totals = [];
+                totals.push(getRandom5(5, remainder - 10));
+                totals.push(getRandom5(5, remainder - totals[0] - 5));
+                totals.push(getRandom5(5, remainder - totals[1]));
+                totals.sort(function(a, b){return b-a}); // sort in ascending order
+
+                secondTotal = Math.round(total*(totals[0]/100));
+                thirdTotal = Math.round(total*(totals[1]/100));
+                poorestTotal = Math.round(total*(totals[2]/100));
+            }
+
+
+            poorest = Math.floor(Math.random() * playercount) + 1;
             while(richest == poorest){
                 poorest = Math.floor(Math.random() * playercount) + 1;
             }
@@ -49,18 +67,22 @@ $(document).ready(function(){
 
             if(playercount > 3){
                 third = Math.floor(Math.random() * playercount) + 1;
+
+                while(richest == third || poorest == third || second == third){
+                    third = Math.floor(Math.random() * playercount) + 1;
+                }
             }
 
-
-            $('#results').append('<p>Ungleichheitsfaktor: '+percentRich+'%</p>');
             // find glückspilz ID
             lucky = Math.floor(Math.random() * playercount) + 1;
+
+            $('#results').append('<p>Ungleichheitsfaktor: '+percentRich+'%</p>');
 
             // generate div container for every player
             for (i = 0; i < playercount; i++) {
                 player = {};
                 player["ID"] = i+1;
-                player["Kontostand"] = (i+1)*10;
+
                 if(player["ID"] == lucky){
                     player["lucky"] = true;
                 } else{
@@ -68,7 +90,21 @@ $(document).ready(function(){
                 }
 
                 if(player["ID"] == richest){
-                    player["Kontostand"] = total*percentRich;
+                    player["Kontostand"] = richTotal;
+                } if (player["ID"] == second){
+                    player["Kontostand"] = secondTotal;
+                } if(player["ID"] == third){
+                    player["Kontostand"] = thirdTotal;
+                } if(player["ID"] == poorest){
+                    player["Kontostand"] = poorestTotal;
+                }
+
+                if(player["Kontostand"] > (total / 3)*2){
+                    player["Status"] = "Reich";
+                } else if (player["Kontostand"] > (total / 3)){
+                    player["Status"] = "Mittelstand";
+                } else{
+                    player["Status"] = "Arm";
                 }
 
                 players["player"+(i+1)] = player;
@@ -80,7 +116,13 @@ $(document).ready(function(){
                     pl += 'Glückspilz!<br>';
                 }
                 pl += 'ID: '+player["ID"]+'<br>';
-                pl += 'Kontostand: '+player["Kontostand"];
+                pl += 'Kontostand: '+player["Kontostand"]+'<br>';
+                pl += 'Status: '+player["Status"]+'<br>';
+                pl += '<span class="btn paybank">Zahlung tätigen (an Bank)</span><br>';
+                pl += '<span class="btn payplayer">Geld anderem Spieler überweisen</span><br>';
+                pl += '<span class="btn addmoney">Erhält Geld von Bank</span><br>';
+                pl += '<span class="btn buydice">Weiteren Wurf kaufen</span><br>';
+                pl += '<span class="btn buydiceresult">Würfelergebnis kaufen</span><br>';
                 pl += '</div><br>';
 
                 // $('#results').append(pl);
@@ -93,6 +135,9 @@ $(document).ready(function(){
             console.log('nicht alle Felder ausgefüllt');
         }
     });
+
+    $('#results').append(sessionStorage.getItem("pl"));
+    console.log(sessionStorage.getItem("pl"));
 });
 
 function getRandom5(min, max) {

@@ -1,0 +1,14 @@
+block vars
+    - var page = { title: "Beneficium", subtitle: "App", author: "Myriam Frisano", description: "a small web app accompanying the game"}
+
+doctype html
+html(lang="de")
+    include includes/head.pug
+
+    body
+        .container
+            block content 
+                
+        include includes/footer.pug
+    // body end
+// html end
