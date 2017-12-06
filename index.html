@@ -14,13 +14,22 @@
     <div class="container">
       <h1>Konfiguration</h1>
       <form>
-        <label>Anzahl Spieler</label>
-        <select id="playercount">
-          <option>Anzahl Spieler</option>
-          <option value="2">2</option>
-          <option value="3" selected>3</option>
-          <option value="4">4        </option>
-        </select><br>
+        <p>Anzahl Spieler</p>
+        <label>
+          <input type="radio" name="playercount" value="2">2
+        </label>
+        <label>
+          <input type="radio" name="playercount" value="3">3
+        </label>
+        <label>
+          <input type="radio" name="playercount" value="4">4
+        </label>
+        <div class="playernames">
+          <input type="text" name="player1name" value="Spieler 1">
+          <input type="text" name="player2name" value="Spieler 2">
+          <input type="text" name="player3name" value="Spieler 3">
+          <input type="text" name="player4name" value="Spieler 4">
+        </div>
         <label>Total Geld zu verteilen
           <input type="number" name="total" id="total" value="1000000">
         </label>

@@ -3,13 +3,21 @@ extends layout.pug
 block content
     h1 Konfiguration
     form
-        label Anzahl Spieler
-        select#playercount
-            option Anzahl Spieler
-            option(value="2") 2
-            option(value="3" selected) 3
-            option(value="4") 4        
-        br
+        p Anzahl Spieler
+        label
+            input(type="radio" name="playercount" value="2")
+            | 2
+        label
+            input(type="radio" name="playercount" value="3")
+            | 3
+        label
+            input(type="radio" name="playercount" value="4")
+            | 4
+        .playernames
+            input(type="text" name="player1name" value="Spieler 1")
+            input(type="text" name="player2name" value="Spieler 2")
+            input(type="text" name="player3name" value="Spieler 3")
+            input(type="text" name="player4name" value="Spieler 4")
         label Total Geld zu verteilen
             input(type="number" name="total" id="total" value="1000000")
         

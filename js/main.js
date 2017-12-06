@@ -1,14 +1,33 @@
 // init variables
 
 $(document).ready(function(){
+    console.log(getCookie('total'));
+    console.log(getCookie('dicePrice'));
+    console.log(getCookie('diceResult'));
+
     var playercount, total, distrib, players = {}, percentRich, richest, poorest, second, third, richTotal, remainder, poorestTotal, secondTotal, thirdTotal;
     // when generate button on index is clicked, HTML is built which will be appended in the results page
+    $('.playernames input').hide();
+    $('input[name="playercount"]').click(function(){
+        var c = $(this).val();
+        $('.playernames input').each(function(){
+            var v = $(this).val();
+            v = v.replace('Spieler ', '');
+            v = parseInt(v);
+            if(v <= c){
+                $(this).slideDown();
+            } else{
+                $(this).slideUp();
+            }
+        });
+        console.log(c);
+    });
 
     $('.generate').click(function(){
         players = {};
         console.log(players);
         // get values from form
-        playercount = parseInt($('#playercount').val());
+        playercount = parseInt($('input[name="playercount"]:checked').val());
         total = parseInt($('#total').val());
         distrib = $('input[name="distrib"]:checked').val();
         setCookie('playercount', playercount, 1);
@@ -16,6 +35,7 @@ $(document).ready(function(){
         // generate prices
         dicePrice = Math.round(total*(.5/100)); // .5% of total for additionall roll
         diceResult = Math.round(total*(5/100)); // 5% of total for buying results
+        setCookie('total', total, 1);
         setCookie('dicePrice', dicePrice, 1);
         setCookie('diceResult', diceResult, 1);
 
@@ -36,7 +56,7 @@ $(document).ready(function(){
             remainder = 100 - percentRich;
 
             if(playercount == 2){
-                poorestTotal = remainder;
+                poorestTotal = Math.round(total*(remainder/100));
             }
             if(playercount > 2){
                 var totals = [];
@@ -88,6 +108,8 @@ $(document).ready(function(){
             for (i = 0; i < playercount; i++) {
                 player = {};
                 player["ID"] = i+1;
+
+                player["name"] = $('input[name="player'+(i+1)+'name"]').val();
 
                 if(player["ID"] == lucky){
                     player["lucky"] = true;
@@ -153,7 +175,7 @@ $(document).ready(function(){
         for (var i = 0; i < parseInt(getCookie('playercount')); i++) {
             var p = players['player'+(i+1)];
             s += '<option value="player'+(i+1)+'">';
-            s += 'Spieler '+p.ID;
+            s += p.name;
             s += '</option>';
         }
         s += '</select>';
@@ -272,7 +294,7 @@ $(document).ready(function(){
                 pl += ' player-dead '
             }
             pl += '">';
-            pl += 'Spieler '+p.ID+'<br>';
+            pl += p.name+'<br>';
             if(p.lucky){
                 pl += 'Glückspilz!<br>';
             }
