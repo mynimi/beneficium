@@ -20,6 +20,8 @@ block content
             input(type="text" name="player4name" value="Spieler 4")
         label Total Geld zu verteilen
             input(type="number" name="total" id="total" value="1000000")
+            svg.icon
+                use(xlink:href="#money")
         
         p Geldverteilung
         label 
@@ -31,4 +33,4 @@ block content
         label 
             input(type="radio" name="distrib" value="large" checked)
             | grosse Ungleichheit (70% - 85% des Geldes geht an reichsten Spieler)
-        a(class="button generate" href="result.html") generiere Spieler
+        a(class="btn generate" href="result.html") generiere Spieler

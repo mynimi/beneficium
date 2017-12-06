@@ -6,6 +6,11 @@ html(lang="de")
     include includes/head.pug
 
     body
+        include includes/svg.html
+        
+        header
+            include includes/logo.html
+            
         .container
             block content 
         block outside

@@ -22,12 +22,11 @@ blockquote{
 
 .btn{
     @extend a;
-    border: 2px solid currentColor;
-    padding: 3px 5px;
-    border-radius: 3px;
+    border: 3px solid currentColor;
+    padding: 5px 7px;
     position: relative;
     top: 12px;
-    line-height: 2;
+    line-height: 2.7;
 }
 
 p + {
@@ -44,16 +43,23 @@ label{
     margin: 10px 0;
 }
 
+.footer{
+    font-size: .7em;
+    text-align: center;
+    padding: 5px;
+}
 
 #results{
     margin: 30px auto;
     @include flexbox(row, wrap, space-between, stretch);
 
-    div{
+    > div{
         padding: 20px;
         box-sizing: border-box;
         border: 1px solid black;
         width: 50%;
+        position: relative;
+        text-align: center;
 
         .playertotal-3 &{
             width: 30%;
@@ -61,6 +67,35 @@ label{
 
         .playertotal-4 &{
             width: 23%;
+        }
+
+        .lucky{
+            position: absolute;
+            top: 5px;
+            right: -10px;
+            background: $lucky-banner-color;
+            color: black-or-white($lucky-banner-color);
+            padding: 5px;
+            font-size: .8em;
+
+            &:after{
+                content: '';
+                position: absolute;
+                top: 100%;
+                right: 0;
+                 @include triangle-ra(10px, 10px, top-left, darken($lucky-banner-color, 10%));
+            }
+        }
+
+        .player-head{
+            padding: 20px 10px;
+            border-bottom: 5px solid black;
+            margin-bottom: 20px;
+        }
+
+        .konto{
+            line-height: 1;
+            margin: 0;
         }
     }
 }
@@ -88,4 +123,26 @@ label{
     &:after{
         transform: translate(-50%, -50%) rotate(45deg);
     }
+}
+
+.logo-wrapper{
+    max-width: 800px;
+    width: 80%;
+    margin: 30px auto;
+}
+.logo{
+    @include paddinghack(100%, 394.9, 70.1, "svg");
+}
+svg{
+    .st0{fill:none;stroke:#000000;stroke-width:1.4173;stroke-miterlimit:10;}
+    .st1{font-family:'Lato';font-weight: bold;}
+    .st2{font-size:54.0306px;}
+    .st3{fill:none;stroke:#000000;stroke-width:5.6693;stroke-miterlimit:10;}
+}
+
+.icon{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
 }

@@ -2,7 +2,11 @@ extends layout.pug
 
 block content
     #data
-        h1 Kosten
+        div.kosten
+            h2 Kosten
+        div.info
+            h2 Info
+            p.luck
     #results
         h1 Resultate
         
@@ -17,7 +21,7 @@ block outside
             option(value="%") Prozent des aktuellen Vermögens
             option(value="x") Wurfpreisfaktor
         br
-        span.btn.done Überweisen
+        span.btn.done Bezahlen
     #payplayer.overlay
         h1 Zahlung an anderen Spieler
         p Eine Ereigniskarte fordert dich zur Überweisung an einen anderen Spieler auf.

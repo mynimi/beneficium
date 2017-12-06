@@ -117,14 +117,18 @@ $(document).ready(function(){
                     player["lucky"] = false;
                 }
 
-                if(player["ID"] == richest){
-                    player["Kontostand"] = richTotal;
-                } if (player["ID"] == second){
-                    player["Kontostand"] = secondTotal;
-                } if(player["ID"] == third){
-                    player["Kontostand"] = thirdTotal;
-                } if(player["ID"] == poorest){
-                    player["Kontostand"] = poorestTotal;
+                if(distrib == "fair"){
+                    player["Kontostand"] = total/playercount;
+                } else{
+                    if(player["ID"] == richest){
+                        player["Kontostand"] = richTotal;
+                    } if (player["ID"] == second){
+                        player["Kontostand"] = secondTotal;
+                    } if(player["ID"] == third){
+                        player["Kontostand"] = thirdTotal;
+                    } if(player["ID"] == poorest){
+                        player["Kontostand"] = poorestTotal;
+                    }
                 }
 
                 if(player["Kontostand"] > (total / 3)*2){
@@ -206,7 +210,7 @@ $(document).ready(function(){
             p = $(this).parent().attr('class');
             c = $(this).attr('class').replace('btn', '').replace(' ', '');
             $('#'+name+' .playerholder').data('is-player', p);
-            $('#'+name+' .playerholder').text(p);
+            $('#'+name+' .playerholder').text(players[p].name);
             openOverlay(c);
             $('.playerlist option').each(function(){
                 if($(this).val() == p){
@@ -251,19 +255,50 @@ $(document).ready(function(){
                 }
             }
 
-            if(operation == 'substract' || recipient){
-                p["Kontostand"] = m - r;
-            } else {
-                p["Kontostand"] = m + r;
+            var confirmation;
+            if(operation == 'substract'){
+                var confirmation = 'Klicke "OK" um '+formatNumber(r)+' von deinem Konto abzubuchen.';
+            } else{
+                var confirmation = 'Klicke "OK" um '+formatNumber(r)+' deinem Konto hinzuzufügen.';
             }
-            if(recipient){
-                u["Kontostand"] = m + r;
-            }
-            setCookie("players", JSON.stringify(players), 1);
-            players = JSON.parse(getCookie("players"));
 
-            generatePlayers('#results');
-            closeOverlay();
+            var plsConfirm = confirm(confirmation);
+
+            if(plsConfirm){
+                if(operation == 'substract' || recipient){
+                    p["Kontostand"] = m - r;
+                } else {
+                    p["Kontostand"] = m + r;
+                }
+                if(recipient){
+                    u["Kontostand"] = m + r;
+
+                    if(u["Kontostand"] > (getCookie('total') / 3)*2){
+                        u["Status"] = "Reich";
+                    } else if (u["Kontostand"] > (getCookie('total') / 3)){
+                        u["Status"] = "Mittelstand";
+                    } else{
+                        u["Status"] = "Arm";
+                    }
+                }
+
+                if(p["Kontostand"] > (getCookie('total') / 3)*2){
+                    p["Status"] = "Reich";
+                } else if (p["Kontostand"] > (getCookie('total') / 3)){
+                    p["Status"] = "Mittelstand";
+                } else{
+                    p["Status"] = "Arm";
+                }
+
+                setCookie("players", JSON.stringify(players), 1);
+                players = JSON.parse(getCookie("players"));
+
+                generatePlayers('#results');
+                closeOverlay();
+            } else {
+                closeOverlay();
+                alert('Aktion abgebroche');
+            }
         });
     }
 
@@ -294,12 +329,34 @@ $(document).ready(function(){
                 pl += ' player-dead '
             }
             pl += '">';
-            pl += p.name+'<br>';
             if(p.lucky){
-                pl += 'Glückspilz!<br>';
+                pl += '<span class="lucky">Glückspilz!</span>';
+
+                $('#data .luck').append('Würfelvorteil: '+p.name);
             }
-            pl += 'Kontostand: '+formatNumber(p.Kontostand)+'<br>';
-            pl += 'Status: '+p.Status+'<br>';
+
+            pl += '<div class="player-head">'
+            pl += '<h2 class="player-name">'+p.name+'</h2>';
+
+            if(p.Status == 'Arm'){
+                pl += '<svg class="icon"><use xlink:href="#money" /></svg>';
+                pl += '<br>';
+            } else if (p.Status == 'Mittelstand'){
+                pl += '<svg class="icon"><use xlink:href="#money" /></svg>';
+                pl += '<svg class="icon"><use xlink:href="#money" /></svg>';
+                pl += '<br>';
+            } else if (p.Status == 'Reich') {
+                pl += '<svg class="icon"><use xlink:href="#money" /></svg>';
+                pl += '<svg class="icon"><use xlink:href="#money" /></svg>';
+                pl += '<svg class="icon"><use xlink:href="#money" /></svg>';
+                pl += '<br>';
+            }
+
+            pl += '</div>';
+
+            pl += '<p>Kontostand</p> <h3 class="konto">'+formatNumber(p.Kontostand)+'</h3>';
+
+
             pl += '<span class="btn paybank">Zahlungen</span><br>';
             pl += '<span class="btn payplayer">Überweisung</span><br>';
             pl += '<span class="btn getmoney">Einzahlung</span><br>';
