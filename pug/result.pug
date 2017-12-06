@@ -1,16 +1,38 @@
 extends layout.pug
 
 block content
+    #data
+        h1 Kosten
     #results
         h1 Resultate
         
-    .paybank
-        h1 Zahlung Tätigen an Bank
-    .payplayer
+block outside        
+    #paybank.overlay
+        h1 Staatliche Zahlungen
+        p Eine Ereigniskarte fordert dich zu einer Zahlung an die Bank auf, oder verkündet einen Geldverlust.
+        p Wie hoch sind deine Kosten #[span.playerholder(data-is-player="0")]?
+        input(type="number" id="paybankNumber" name="paybank" value="")
+        select#paybankType
+            option(value="") Bitte wählen
+            option(value="%") Prozent des aktuellen Vermögens
+            option(value="x") Wurfpreisfaktor
+        br
+        span.btn.done Überweisen
+    #payplayer.overlay
         h1 Zahlung an anderen Spieler
-    .addmoney
+        p Eine Ereigniskarte fordert dich zur Überweisung an einen anderen Spieler auf.
+        p Wie viel Geld bezahlst du wem #[span.playerholder(data-is-player="0")]?
+        input(type="number" id="paybankNumber" name="paybank" value="")
+        select#paybankType
+            option(value="") Bitte wählen
+            option(value="%") Prozent des aktuellen Vermögens
+            option(value="x") Wurfpreisfaktor
+        br
+        p.playerlist
+        span.btn.done Überweisen
+    #getmoney.overlay
         h1 Erhält Zahlung
-    .buydice
+    #buydice.overlay
         h1 Wurf kaufen
-    .buydiceresult
+    #buydiceresult.overlay
         h1 Würfelergebnis kaufen

@@ -1,20 +1,26 @@
-$(document).ready(function(){
-    // init variables
-    var playercount, total, distrib, players = {}, percentRich, richest, poorest, second, third, richTotal, remainder, poorestTotal, secondTotal, thirdTotal;
+// init variables
 
+$(document).ready(function(){
+    var playercount, total, distrib, players = {}, percentRich, richest, poorest, second, third, richTotal, remainder, poorestTotal, secondTotal, thirdTotal;
     // when generate button on index is clicked, HTML is built which will be appended in the results page
+
     $('.generate').click(function(){
+        players = {};
+        console.log(players);
         // get values from form
         playercount = parseInt($('#playercount').val());
         total = parseInt($('#total').val());
         distrib = $('input[name="distrib"]:checked').val();
+        setCookie('playercount', playercount, 1);
 
-        // sessionStorage.getItem("Test");
-        // sessionStorage.setItem("Test",playercount
-        // empty sessionstorages for new generating
-        sessionStorage.pl = '';
+        // generate prices
+        dicePrice = Math.round(total*(.5/100)); // .5% of total for additionall roll
+        diceResult = Math.round(total*(5/100)); // 5% of total for buying results
+        setCookie('dicePrice', dicePrice, 1);
+        setCookie('diceResult', diceResult, 1);
 
         if(playercount != null && total != null && distrib != null){
+
             // find difference between poor and rich
             if(distrib == 'fair'){
                 percentRich = 100/playercount;
@@ -109,48 +115,183 @@ $(document).ready(function(){
 
                 players["player"+(i+1)] = player;
 
-                var pl;
-                pl = '<div class="player-'+(i+1)+'">';
-                pl += 'Spieler '+(i+1)+'<br>';
-                if(player["lucky"]){
-                    pl += 'Glückspilz!<br>';
-                }
-                pl += 'ID: '+player["ID"]+'<br>';
-                pl += 'Kontostand: '+player["Kontostand"]+'<br>';
-                pl += 'Status: '+player["Status"]+'<br>';
-                pl += '<span class="btn paybank">Zahlung tätigen (an Bank)</span><br>';
-                pl += '<span class="btn payplayer">Geld anderem Spieler überweisen</span><br>';
-                pl += '<span class="btn addmoney">Erhält Geld von Bank</span><br>';
-                pl += '<span class="btn buydice">Weiteren Wurf kaufen</span><br>';
-                pl += '<span class="btn buydiceresult">Würfelergebnis kaufen</span><br>';
-                pl += '</div><br>';
-
-                // $('#results').append(pl);
-                sessionStorage.pl += pl;
-
-
-
             }
-            setCookie('players', players, 1);
+
             setCookie("players", JSON.stringify(players), 1);
-            // console.log(players);
+            console.log(players);
             // console.log(players['player1'].Kontostand);
         } else{
             console.log('nicht alle Felder ausgefüllt');
         }
     });
 
-    $('#results').append(sessionStorage.getItem("pl"));
-    console.log(JSON.parse(getCookie("players")));
+    $('body').addClass('playertotal-'+getCookie('playercount'));
+    $('#data').append('<p>Zusätzlicher Wurf: '+formatNumber(getCookie('dicePrice'))+'</p>');
+    $('#data').append('<p>Wurfergebnis: '+formatNumber(getCookie('diceResult'))+'</p>');
+    var players = JSON.parse(getCookie("players"));
+    generatePlayers('#results');
 
-    // later on...
-    // var people = $.parseJSON(getCookie("players"));
-    // people.push(
-    //     { 'name' : 'Daniel', 'age' : 4 }
-    // );
-    // $.cookie("people", JSON.stringify(people));
+    $('.paybank').click(function(){
+        p = $(this).parent().attr('class');
+        c = $(this).attr('class').replace('btn', '').replace(' ', '');
+        $('#paybank .playerholder').data('is-player', p);
+        $('#paybank .playerholder').text(p);
+        openOverlay(c);
+    });
+    $('#paybank .done').click(function(){
+        var isPlayer = $('#paybank .playerholder').data('is-player');
+            p = players[isPlayer],
+            m = parseInt(p.Kontostand),
+            n = $('#paybankNumber').val();
+            t = $('#paybankType').val(),
+            r;
 
+        if(n != '' && t != ''){
+            var r;
+            if(t == '%'){
+                r = (m/100)*n;
+            }
+            if(t == 'x'){
+                var dp = parseInt(getCookie('dicePrice'));
+                r = n*dp;
+            }
+        } else{
+            alert("Bitte fülle alle Felder aus");
+        }
+
+        p["Kontostand"] = m - r;
+
+        setCookie("players", JSON.stringify(players), 1);
+        players = JSON.parse(getCookie("players"));
+
+        generatePlayers('#results');
+        closeOverlay();
+    });
+
+    $('.payplayer').click(function(){
+        p = $(this).parent().attr('class');
+        c = $(this).attr('class').replace('btn', '').replace(' ', '');
+        $('#payplayer .playerholder').data('is-player', p);
+        $('#payplayer .playerholder').text(p);
+        openOverlay(c);
+        $('.playerlist option').each(function(){
+            if($(this).val() == p){
+                $(this).hide();
+            } else{
+                $(this).show();
+            }
+        });
+    });
+    $('#payplayer .done').click(function(){
+        var isPlayer = $('#payplayer .playerholder').data('is-player');
+            p = players[isPlayer],
+            m = parseInt(p.Kontostand),
+            n = $('#paybankNumber').val();
+            t = $('#paybankType').val(),
+            r;
+
+
+        if(n != '' && t != ''){
+            var r;
+            if(t == '%'){
+                r = (m/100)*n;
+            }
+            if(t == 'x'){
+                var dp = parseInt(getCookie('dicePrice'));
+                r = n*dp;
+            }
+        } else{
+            alert("Bitte fülle alle Felder aus");
+        }
+
+        p["Kontostand"] = m - r;
+
+        setCookie("players", JSON.stringify(players), 1);
+        players = JSON.parse(getCookie("players"));
+
+        generatePlayers('#results');
+        closeOverlay();
+    });
+
+    $('.playerlist').each(function(){
+        var s = '<select id="#playerlist">';
+        s += '<option>Bitte wählen</option>';
+
+        for (var i = 0; i < parseInt(getCookie('playercount')); i++) {
+            var p = players['player'+(i+1)];
+            s += '<option value="player'+(i+1)+'">';
+            s += 'Spieler '+p.ID;
+            s += '</option>';
+        }
+        s += '</select>';
+
+        $(this).append(s);
+    });
+
+
+    $('.overlay').each(function(){
+        $(this).hide();
+        $(this).prepend('<span class="close">+</span>');
+    });
+
+    $('.overlay .close').click(function(){
+        closeOverlay();
+    });
+    $('body').on('click touchstart', '.overlay-backdrop', function(){
+        closeOverlay();
+    });
+
+    $(document).keyup(function(e) {
+        if (e.keyCode === 27){
+            closeOverlay();
+        }
+    });
+
+    function openOverlay(c) {
+        $('#'+c).fadeIn();
+        $('#'+c).addClass('active');
+        $('body').addClass('overlay-open');
+        $('body').append('<div class="overlay-backdrop"></div>');
+    }
+
+    function closeOverlay(){
+        $('.overlay').fadeOut();
+        $('.overlay').removeClass('active');
+        $('body').removeClass('overlay-open');
+        $('.overlay-backdrop').remove();
+    }
+
+    // generating  Players HTML
+    function generatePlayers(containerSelector){
+        $(containerSelector).empty();
+        for (var i = 0; i < parseInt(getCookie('playercount')); i++) {
+            var p = players['player'+(i+1)],
+                pl = '';
+            // console.log(p);
+
+            pl += '<div class="player'+p.ID;
+            if(p.Kontostand < 0){
+                pl += ' player-dead '
+            }
+            pl += '">';
+            pl += 'Spieler '+p.ID+'<br>';
+            if(p.lucky){
+                pl += 'Glückspilz!<br>';
+            }
+            pl += 'Kontostand: '+formatNumber(p.Kontostand)+'<br>';
+            pl += 'Status: '+p.Status+'<br>';
+            pl += '<span class="btn paybank">staatliche Zahlungen</span><br>';
+            pl += '<span class="btn payplayer">Geld anderem Spieler überweisen</span><br>';
+            pl += '<span class="btn getmoney">Erhält Geld von Bank</span><br>';
+            pl += '<span class="btn buydice">Weiteren Wurf kaufen</span><br>';
+            pl += '<span class="btn buydiceresult">Würfelergebnis kaufen</span><br>';
+            pl += '</div><br>';
+
+            $(containerSelector).append(pl);
+        }
+    }
 });
+
 
 function getRandom5(min, max) {
   return getRandomInt(min / 5, max / 5) * 5;
@@ -180,4 +321,16 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function formatNumber(nStr){
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + "'" + '$2');
+    }
+    return x1 + x2;
 }

@@ -11,19 +11,16 @@ block content
             option(value="4") 4        
         br
         label Total Geld zu verteilen
-            input(type="number" name="total" id="total" value="1000")
-        br
+            input(type="number" name="total" id="total" value="1000000")
+        
         p Geldverteilung
         label 
             input(type="radio" name="distrib" value="fair")
             | keine Ungleichheit (jeder Spieler erhält gleich viel Startkapital)
-        br
         label 
             input(type="radio" name="distrib" value="small")
             | kleine Ungleichheit (40% - 60% des Geldes geht an den reichsten Spieler)
-        br
         label 
             input(type="radio" name="distrib" value="large" checked)
             | grosse Ungleichheit (70% - 85% des Geldes geht an reichsten Spieler)
-        br
         a(class="button generate" href="result.html") generiere Spieler

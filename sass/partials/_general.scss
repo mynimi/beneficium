@@ -38,3 +38,54 @@ p + {
         margin-top: 20px;
     }
 }
+
+label{
+    display: block;
+    margin: 10px 0;
+}
+
+
+#results{
+    margin: 30px auto;
+    @include flexbox(row, wrap, space-between, stretch);
+
+    div{
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid black;
+        width: 50%;
+
+        .playertotal-3 &{
+            width: 30%;
+        }
+
+        .playertotal-4 &{
+            width: 23%;
+        }
+    }
+}
+
+.player-dead{
+    position: relative;
+    opacity: .5;
+
+    &:before,
+    &:after{
+        content: '';
+        width: 10px;
+        height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background: red;
+        z-index: 1;
+    }
+
+    &:before{
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    &:after{
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+}
