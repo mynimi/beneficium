@@ -84,7 +84,7 @@ $(document).ready(function(){
             // find glückspilz ID
             lucky = Math.floor(Math.random() * playercount) + 1;
 
-            // generate div container for every player
+            // generate objects for every player
             for (i = 0; i < playercount; i++) {
                 player = {};
                 player["ID"] = i+1;
@@ -131,13 +131,24 @@ $(document).ready(function(){
     var players = JSON.parse(getCookie("players"));
     generatePlayers('#results');
 
-    $('.paybank').click(function(){
-        p = $(this).parent().attr('class');
-        c = $(this).attr('class').replace('btn', '').replace(' ', '');
-        $('#paybank .playerholder').data('is-player', p);
-        $('#paybank .playerholder').text(p);
-        openOverlay(c);
-    });
+    function overlayOpener(name){
+        $('#results').on('click', '.'+name, function (){
+            p = $(this).parent().attr('class');
+            c = $(this).attr('class').replace('btn', '').replace(' ', '');
+            $('#'+name+' .playerholder').data('is-player', p);
+            $('#'+name+' .playerholder').text(p);
+            openOverlay(c);
+        });
+    }
+    overlayOpener('paybank');
+
+    // $('#results').on('click', '.paybank', function (){
+    //     p = $(this).parent().attr('class');
+    //     c = $(this).attr('class').replace('btn', '').replace(' ', '');
+    //     $('#paybank .playerholder').data('is-player', p);
+    //     $('#paybank .playerholder').text(p);
+    //     openOverlay(c);
+    // });
     $('#paybank .done').click(function(){
         var isPlayer = $('#paybank .playerholder').data('is-player');
             p = players[isPlayer],
@@ -168,6 +179,87 @@ $(document).ready(function(){
         closeOverlay();
     });
 
+    $('#results').on('click', '.buydice', function (){
+        p = $(this).parent().attr('class');
+        c = $(this).attr('class').replace('btn', '').replace(' ', '');
+        $('#buydice .playerholder').data('is-player', p);
+        $('#buydice .playerholder').text(p);
+        openOverlay(c);
+    });
+    $('#buydice .done').click(function(){
+        var isPlayer = $('#buydice .playerholder').data('is-player');
+            p = players[isPlayer],
+            m = parseInt(p.Kontostand),
+            r = getCookie('dicePrice');
+
+        p["Kontostand"] = m - r;
+
+        setCookie("players", JSON.stringify(players), 1);
+        players = JSON.parse(getCookie("players"));
+
+        generatePlayers('#results');
+        closeOverlay();
+    });
+
+    $('.buydiceresult').click(function(){
+        p = $(this).parent().attr('class');
+        c = $(this).attr('class').replace('btn', '').replace(' ', '');
+        $('#buydiceresult .playerholder').data('is-player', p);
+        $('#buydiceresult .playerholder').text(p);
+        openOverlay(c);
+    });
+    $('#buydiceresult .done').click(function(){
+        var isPlayer = $('#buydiceresult .playerholder').data('is-player');
+            p = players[isPlayer],
+            m = parseInt(p.Kontostand),
+            r = getCookie('diceResult');
+
+        p["Kontostand"] = m - r;
+
+        setCookie("players", JSON.stringify(players), 1);
+        players = JSON.parse(getCookie("players"));
+
+        generatePlayers('#results');
+        closeOverlay();
+    });
+
+    $('.getmoney').click(function(){
+        p = $(this).parent().attr('class');
+        c = $(this).attr('class').replace('btn', '').replace(' ', '');
+        $('#getmoney .playerholder').data('is-player', p);
+        $('#getmoney .playerholder').text(p);
+        openOverlay(c);
+    });
+    $('#getmoney .done').click(function(){
+        var isPlayer = $('#getmoney .playerholder').data('is-player');
+            p = players[isPlayer],
+            m = parseInt(p.Kontostand),
+            n = $('#getmoneyNumber').val();
+            t = $('#getmoneyType').val(),
+            r;
+
+        if(n != '' && t != ''){
+            var r;
+            if(t == '%'){
+                r = (m/100)*n;
+            }
+            if(t == 'x'){
+                var dp = parseInt(getCookie('dicePrice'));
+                r = n*dp;
+            }
+        } else{
+            alert("Bitte fülle alle Felder aus");
+        }
+
+        p["Kontostand"] = m + r;
+
+        setCookie("players", JSON.stringify(players), 1);
+        players = JSON.parse(getCookie("players"));
+
+        generatePlayers('#results');
+        closeOverlay();
+    });
+
     $('.payplayer').click(function(){
         p = $(this).parent().attr('class');
         c = $(this).attr('class').replace('btn', '').replace(' ', '');
@@ -186,13 +278,13 @@ $(document).ready(function(){
         var isPlayer = $('#payplayer .playerholder').data('is-player');
             p = players[isPlayer],
             m = parseInt(p.Kontostand),
-            n = $('#paybankNumber').val();
-            t = $('#paybankType').val(),
-            r;
+            n = $('#payplayerNumber').val();
+            t = $('#payplayerType').val(),
+            w = $('#payplayer .playerlist select option:selected').val();
+        var r;
+        var u;
 
-
-        if(n != '' && t != ''){
-            var r;
+        if(n != '' && t != '' && w != ''){
             if(t == '%'){
                 r = (m/100)*n;
             }
@@ -200,11 +292,18 @@ $(document).ready(function(){
                 var dp = parseInt(getCookie('dicePrice'));
                 r = n*dp;
             }
+            u = players[w];
+            console.log(p["Kontostand"]);
+            console.log(u["Kontostand"]);
+            console.log(n);
+            console.log(t);
+            console.log(w);
         } else{
             alert("Bitte fülle alle Felder aus");
         }
 
         p["Kontostand"] = m - r;
+        u["Kontostand"] = m + r;
 
         setCookie("players", JSON.stringify(players), 1);
         players = JSON.parse(getCookie("players"));
@@ -215,7 +314,7 @@ $(document).ready(function(){
 
     $('.playerlist').each(function(){
         var s = '<select id="#playerlist">';
-        s += '<option>Bitte wählen</option>';
+        s += '<option value="">Bitte wählen</option>';
 
         for (var i = 0; i < parseInt(getCookie('playercount')); i++) {
             var p = players['player'+(i+1)];
@@ -280,11 +379,11 @@ $(document).ready(function(){
             }
             pl += 'Kontostand: '+formatNumber(p.Kontostand)+'<br>';
             pl += 'Status: '+p.Status+'<br>';
-            pl += '<span class="btn paybank">staatliche Zahlungen</span><br>';
-            pl += '<span class="btn payplayer">Geld anderem Spieler überweisen</span><br>';
-            pl += '<span class="btn getmoney">Erhält Geld von Bank</span><br>';
-            pl += '<span class="btn buydice">Weiteren Wurf kaufen</span><br>';
-            pl += '<span class="btn buydiceresult">Würfelergebnis kaufen</span><br>';
+            pl += '<span class="btn paybank">Zahlungen</span><br>';
+            pl += '<span class="btn payplayer">Überweisung</span><br>';
+            pl += '<span class="btn getmoney">Einzahlung</span><br>';
+            pl += '<span class="btn buydice">Wurf kaufen</span><br>';
+            pl += '<span class="btn buydiceresult">Wurfergebnis kaufen</span><br>';
             pl += '</div><br>';
 
             $(containerSelector).append(pl);
