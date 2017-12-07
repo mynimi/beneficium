@@ -1,9 +1,21 @@
 nav{
-    width: 90%;
-    margin: 10px auto;
+    // margin: 10px;
+    max-width: 80%;
     font-size: .9em;
-    text-align: right;
+    @include flexbox(row, wrap, center, center);
     a{
         padding: 10px;
+    }
+}
+
+header{
+    @include flexbox(row-reverse, wrap, space-between, center);
+    max-width: $container-max-width;
+    width: $container-width;
+    margin: 30px auto;
+
+    @media screen and (max-width: 800px){
+        flex-direction: row;
+        justify-content: center;
     }
 }

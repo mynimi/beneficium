@@ -143,7 +143,7 @@ label { display: block; }
 
 .player-dead:after { -webkit-transform: translate(-50%, -50%) rotate(45deg); -ms-transform: translate(-50%, -50%) rotate(45deg); transform: translate(-50%, -50%) rotate(45deg); }
 
-.logo-wrapper { max-width: 800px; width: 80%; margin: 30px auto; }
+.logo-wrapper { max-width: 300px; width: 80%; }
 
 .logo { position: relative; width: 100%; height: 0; padding: 17.75133% 0 0 0; display: block; }
 
@@ -163,9 +163,13 @@ svg .st3 { fill: none; stroke: #000000; stroke-width: 5.6693; stroke-miterlimit:
 
 #data .btn { margim: 0; top: 0; line-height: 1; }
 
-nav { width: 90%; margin: 10px auto; font-size: .9em; text-align: right; }
+nav { max-width: 80%; font-size: .9em; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -webkit-flex-direction: row; -ms-flex-direction: row; flex-direction: row; -webkit-flex-wrap: wrap; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: center; -webkit-justify-content: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; }
 
 nav a, nav .btn { padding: 10px; }
+
+header { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: reverse; -webkit-flex-direction: row-reverse; -ms-flex-direction: row-reverse; flex-direction: row-reverse; -webkit-flex-wrap: wrap; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: justify; -webkit-justify-content: space-between; -ms-flex-pack: justify; justify-content: space-between; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; max-width: 1920px; width: 80%; margin: 30px auto; }
+
+@media screen and (max-width: 800px) { header { -webkit-box-orient: horizontal; -webkit-box-direction: normal; -webkit-flex-direction: row; -ms-flex-direction: row; flex-direction: row; -webkit-box-pack: center; -webkit-justify-content: center; -ms-flex-pack: center; justify-content: center; } }
 
 .overlay-open div:not(.overlay) { -webkit-filter: blur(8px); filter: blur(8px); }
 

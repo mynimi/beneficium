@@ -150,9 +150,9 @@ label{
 }
 
 .logo-wrapper{
-    max-width: 800px;
+    max-width: 300px;
     width: 80%;
-    margin: 30px auto;
+    // margin: 30px;
 }
 .logo{
     @include paddinghack(100%, 394.9, 70.1, "svg");
