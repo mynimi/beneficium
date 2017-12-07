@@ -1,19 +1,25 @@
 block vars
-    - var page = { title: "Beneficium", subtitle: "App", author: "Myriam Frisano", description: "a small web app accompanying the game"}
+    - var page = { title: "Beneficium", subtitle: "Geld kauft Glück", author: "Myriam Frisano", description: "a small web app accompanying the game"}
 
 doctype html
 html(lang="de")
     include includes/head.pug
-
-    body
+    
+    body        
         include includes/svg.html
-        
         header
+            nav
+                a(href="index.html").restart Neustart
+                a(href="anleitung.html") Anleitung
+                a(href="download.html") Download
+                a(href="result.html") Spiel
+        
             include includes/logo.html
             
-        .container
-            block content 
-        block outside
+        main
+            .container
+                block content 
+            block outside
         include includes/footer.pug
     // body end
 // html end

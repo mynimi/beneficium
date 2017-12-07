@@ -7,6 +7,8 @@ block content
         div.info
             h2 Info
             p.luck
+            p.digitalDice
+                span.btn Würfeln
     #results
         h1 Resultate
         
@@ -17,9 +19,9 @@ block outside
         p Wie hoch sind deine Kosten #[span.playerholder(data-is-player="0")]?
         input(type="number" id="paybankNumber" name="paybank" value="")
         select#paybankType
-            option(value="") Bitte wählen
+            option(value="") Einheit
             option(value="%") Prozent des aktuellen Vermögens
-            option(value="x") Wurfpreisfaktor
+            option(value="x") Wurfpreisfaktor (WP)
         br
         span.btn.done Bezahlen
     #payplayer.overlay
@@ -28,9 +30,9 @@ block outside
         p Wie viel Geld bezahlst du wem #[span.playerholder(data-is-player="0")]?
         input(type="number" id="payplayerNumber" name="payplayer" value="")
         select#payplayerType
-            option(value="") Bitte wählen
+            option(value="") Einheit
             option(value="%") Prozent des aktuellen Vermögens
-            option(value="x") Wurfpreisfaktor
+            option(value="x") Wurfpreisfaktor (WP)
         br
         p.playerlist
         span.btn.done Überweisen
@@ -39,9 +41,9 @@ block outside
         p Du erhältst von einer Ereigniskarte neues Kapital, wie hoch ist der Betrag, #[span.playerholder(data-is-player="0")]?
         input(type="number" id="getmoneyNumber" name="paybank" value="")
         select#getmoneyType
-            option(value="") Bitte wählen
+            option(value="") Einheit
             option(value="%") Prozent des aktuellen Vermögens
-            option(value="x") Wurfpreisfaktor
+            option(value="x") Wurfpreisfaktor (WP)
         br
         span.btn.done Einzahlen
     #buydice.overlay

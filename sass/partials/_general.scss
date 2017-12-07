@@ -1,3 +1,13 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
 blockquote{
     font-size: 1.2em;
     width: 95%;
@@ -40,7 +50,6 @@ p + {
 
 label{
     display: block;
-    margin: 10px 0;
 }
 
 .footer{
@@ -57,16 +66,31 @@ label{
         padding: 20px;
         box-sizing: border-box;
         border: 1px solid black;
-        width: 50%;
+        width: calc(50% - 20px);
+        margin: 10px;
         position: relative;
         text-align: center;
 
+        @media screen and (max-width: 650px){
+          width: 100%;
+        }
+
         .playertotal-3 &{
-            width: 30%;
+            width: calc((100% / 3) - 20px);
+
+            @media screen and (max-width: 980px){
+              width: 100%;
+            }
         }
 
         .playertotal-4 &{
-            width: 23%;
+            width: calc((100% / 4) - 20px);
+            @media screen and (max-width: 1330px){
+                width: calc(50% - 20px);
+            }
+            @media screen and (max-width: 650px){
+              width: 100%;
+            }
         }
 
         .lucky{
@@ -145,4 +169,13 @@ svg{
     height: 20px;
     display: inline-block;
     vertical-align: middle;
+}
+
+#data{
+    @include flexbox(row, wrap, space-between, center);
+    .btn{
+        margim: 0;
+        top: 0;
+        line-height: 1;
+    }
 }

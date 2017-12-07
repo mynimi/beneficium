@@ -1,18 +1,26 @@
 // init variables
 
 $(document).ready(function(){
-    console.log(getCookie('total'));
-    console.log(getCookie('dicePrice'));
-    console.log(getCookie('diceResult'));
-
     var playercount, total, distrib, players = {}, percentRich, richest, poorest, second, third, richTotal, remainder, poorestTotal, secondTotal, thirdTotal;
-    // when generate button on index is clicked, HTML is built which will be appended in the results page
+
+    if (window.location.href.indexOf("result.html") > -1) {
+        if(!getCookie('players')){
+            window.location.href = "index.html";
+        }
+    }
+
+    $('.restart').click(function(e){
+        var check = confirm('Bist du sicher, dass du neu starten möchtest? Alle gespeicherten Spielstände werden gelöscht.');
+        if(!check){
+            e.preventDefault();
+        }
+    });
     $('.playernames input').hide();
     $('input[name="playercount"]').click(function(){
         var c = $(this).val();
         $('.playernames input').each(function(){
             var v = $(this).val();
-            v = v.replace('Spieler ', '');
+            v = v.replace('Name Spieler ', '');
             v = parseInt(v);
             if(v <= c){
                 $(this).slideDown();
@@ -23,7 +31,7 @@ $(document).ready(function(){
         console.log(c);
     });
 
-    $('.generate').click(function(){
+    $('.generate').click(function(e){
         players = {};
         console.log(players);
         // get values from form
@@ -33,14 +41,13 @@ $(document).ready(function(){
         setCookie('playercount', playercount, 1);
 
         // generate prices
-        dicePrice = Math.round(total*(.5/100)); // .5% of total for additionall roll
-        diceResult = Math.round(total*(5/100)); // 5% of total for buying results
+        dicePrice = Math.round(total*($('#roll').val()/100)); // .5% of total for additionall roll
+        diceResult = Math.round(total*($('#res').val()/100)); // 5% of total for buying results
         setCookie('total', total, 1);
         setCookie('dicePrice', dicePrice, 1);
         setCookie('diceResult', diceResult, 1);
 
-        if(playercount != null && total != null && distrib != null){
-
+        if(playercount){
             // find difference between poor and rich
             if(distrib == 'fair'){
                 percentRich = 100/playercount;
@@ -147,13 +154,14 @@ $(document).ready(function(){
             console.log(players);
             // console.log(players['player1'].Kontostand);
         } else{
-            console.log('nicht alle Felder ausgefüllt');
+            alert('nicht alle Felder ausgefüllt');
+            e.preventDefault();
         }
     });
 
     $('body').addClass('playertotal-'+getCookie('playercount'));
-    $('#data').append('<p>Zusätzlicher Wurf: '+formatNumber(getCookie('dicePrice'))+'</p>');
-    $('#data').append('<p>Wurfergebnis: '+formatNumber(getCookie('diceResult'))+'</p>');
+    $('#data .kosten').append('<p>Zusätzlicher Wurf: '+formatNumber(getCookie('dicePrice'))+'</p>');
+    $('#data .kosten').append('<p>Wurfergebnis: '+formatNumber(getCookie('diceResult'))+'</p>');
     var players = JSON.parse(getCookie("players"));
     generatePlayers('#results');
 
@@ -174,7 +182,7 @@ $(document).ready(function(){
 
     $('.playerlist').each(function(){
         var s = '<select id="#playerlist">';
-        s += '<option value="">Bitte wählen</option>';
+        s += '<option value="">Empfänger wählen</option>';
 
         for (var i = 0; i < parseInt(getCookie('playercount')); i++) {
             var p = players['player'+(i+1)];
@@ -367,6 +375,11 @@ $(document).ready(function(){
             $(containerSelector).append(pl);
         }
     }
+
+    $('.digitalDice').click(function(){
+        var r = getRandomInt(1, 6);
+        alert('Du hast '+r+' gewürfelt.');
+    });
 });
 
 

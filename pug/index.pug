@@ -14,15 +14,18 @@ block content
             input(type="radio" name="playercount" value="4")
             | 4
         .playernames
-            input(type="text" name="player1name" value="Spieler 1")
-            input(type="text" name="player2name" value="Spieler 2")
-            input(type="text" name="player3name" value="Spieler 3")
-            input(type="text" name="player4name" value="Spieler 4")
-        label Total Geld zu verteilen
+            input(type="text" name="player1name" value="Name Spieler 1")
+            input(type="text" name="player2name" value="Name Spieler 2")
+            input(type="text" name="player3name" value="Name Spieler 3")
+            input(type="text" name="player4name" value="Name Spieler 4")
+        label Total Gesamtkapital zu verteilen
             input(type="number" name="total" id="total" value="1000000")
             svg.icon
                 use(xlink:href="#money")
-        
+        label Kosten zusätzlicher Wurf (% des Gesamtkapitals)
+            input(type="number" name="roll" id="roll" value="0.5")
+        label Kosten Wurfergebnis (% des Gesamtkapitals)
+            input(type="number" name="res" id="res" value="5")
         p Geldverteilung
         label 
             input(type="radio" name="distrib" value="fair")

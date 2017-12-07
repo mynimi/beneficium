@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="expires" content="43200">
-    <title>Beneficium - App</title>
+    <title>Beneficium - Geld kauft Glück</title>
     <meta name="description" content="#{page.description}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="#{page.author}">
@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="css/main.css">
   </head>
   <!-- head end-->
-  <body><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="display: none;">
+  <body>
+           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="display: none;">
 
 <symbol id="money" viewBox="0 0 14.3 14.3">
     <style type="text/css">
@@ -31,7 +32,8 @@
 
 </svg>
 
-    <header><div class="logo-wrapper">
+    <header>
+      <nav><a class="restart" href="index.html">Neustart</a><a href="anleitung.html">Anleitung</a><a href="download.html">Download</a><a href="result.html">Spiel</a></nav><div class="logo-wrapper">
     <div class="logo">
         <svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         	 viewBox="0 0 394.9 70.1" style="enable-background:new 0 0 394.9 70.1;" xml:space="preserve">
@@ -71,61 +73,64 @@
 </div>
 
     </header>
-    <div class="container">
-      <div id="data">
-        <div class="kosten">
-          <h2>Kosten</h2>
+    <main>
+      <div class="container">
+        <div id="data">
+          <div class="kosten">
+            <h2>Kosten</h2>
+          </div>
+          <div class="info">
+            <h2>Info</h2>
+            <p class="luck"></p>
+            <p class="digitalDice"><span class="btn">Würfeln</span></p>
+          </div>
         </div>
-        <div class="info">
-          <h2>Info</h2>
-          <p class="luck"></p>
+        <div id="results">
+          <h1>Resultate</h1>
         </div>
       </div>
-      <div id="results">
-        <h1>Resultate</h1>
+      <div class="overlay" id="paybank">
+        <h1>Staatliche Zahlungen</h1>
+        <p>Eine Ereigniskarte fordert dich zu einer Zahlung an die Bank auf, oder verkündet einen Geldverlust.</p>
+        <p>Wie hoch sind deine Kosten <span class="playerholder" data-is-player="0"></span>?</p>
+        <input type="number" id="paybankNumber" name="paybank" value="">
+        <select id="paybankType">
+          <option value="">Einheit</option>
+          <option value="%">Prozent des aktuellen Vermögens</option>
+          <option value="x">Wurfpreisfaktor (WP)</option>
+        </select><br><span class="btn done">Bezahlen</span>
       </div>
-    </div>
-    <div class="overlay" id="paybank">
-      <h1>Staatliche Zahlungen</h1>
-      <p>Eine Ereigniskarte fordert dich zu einer Zahlung an die Bank auf, oder verkündet einen Geldverlust.</p>
-      <p>Wie hoch sind deine Kosten <span class="playerholder" data-is-player="0"></span>?</p>
-      <input type="number" id="paybankNumber" name="paybank" value="">
-      <select id="paybankType">
-        <option value="">Bitte wählen</option>
-        <option value="%">Prozent des aktuellen Vermögens</option>
-        <option value="x">Wurfpreisfaktor</option>
-      </select><br><span class="btn done">Bezahlen</span>
-    </div>
-    <div class="overlay" id="payplayer">
-      <h1>Zahlung an anderen Spieler</h1>
-      <p>Eine Ereigniskarte fordert dich zur Überweisung an einen anderen Spieler auf.</p>
-      <p>Wie viel Geld bezahlst du wem <span class="playerholder" data-is-player="0"></span>?</p>
-      <input type="number" id="payplayerNumber" name="payplayer" value="">
-      <select id="payplayerType">
-        <option value="">Bitte wählen</option>
-        <option value="%">Prozent des aktuellen Vermögens</option>
-        <option value="x">Wurfpreisfaktor</option>
-      </select><br>
-      <p class="playerlist"></p><span class="btn done">Überweisen</span>
-    </div>
-    <div class="overlay" id="getmoney">
-      <h1>Erhält Zahlung</h1>
-      <p>Du erhältst von einer Ereigniskarte neues Kapital, wie hoch ist der Betrag, <span class="playerholder" data-is-player="0"></span>?</p>
-      <input type="number" id="getmoneyNumber" name="paybank" value="">
-      <select id="getmoneyType">
-        <option value="">Bitte wählen</option>
-        <option value="%">Prozent des aktuellen Vermögens</option>
-        <option value="x">Wurfpreisfaktor</option>
-      </select><br><span class="btn done">Einzahlen</span>
-    </div>
-    <div class="overlay" id="buydice">
-      <h1>Wurf kaufen</h1>
-      <p>Wenn du einen Wurf kaufen willst, um noch einmal zu würfeln, bestätige mit dem Button, <span class="playerholder" data-is-player="0"></span>?</p><span class="btn done">Kaufen</span>
-    </div>
-    <div class="overlay" id="buydiceresult">
-      <h1>Wurfergebnis kaufen</h1>
-      <p>Wenn du ein Wurfresultat kaufen willst, um eine beliebige Anzahl Felder zwischen 1 und 6 vorzurücken, klicke auf den Button um zu bestätigen,  <span class="playerholder" data-is-player="0"></span>?</p><br><span class="btn done">Kaufen</span>
-    </div>
+      <div class="overlay" id="payplayer">
+        <h1>Zahlung an anderen Spieler</h1>
+        <p>Eine Ereigniskarte fordert dich zur Überweisung an einen anderen Spieler auf.</p>
+        <p>Wie viel Geld bezahlst du wem <span class="playerholder" data-is-player="0"></span>?</p>
+        <input type="number" id="payplayerNumber" name="payplayer" value="">
+        <select id="payplayerType">
+          <option value="">Einheit</option>
+          <option value="%">Prozent des aktuellen Vermögens</option>
+          <option value="x">Wurfpreisfaktor (WP)</option>
+        </select><br>
+        <p class="playerlist"></p><span class="btn done">Überweisen</span>
+      </div>
+      <div class="overlay" id="getmoney">
+        <h1>Erhält Zahlung</h1>
+        <p>Du erhältst von einer Ereigniskarte neues Kapital, wie hoch ist der Betrag, <span class="playerholder" data-is-player="0"></span>?</p>
+        <input type="number" id="getmoneyNumber" name="paybank" value="">
+        <select id="getmoneyType">
+          <option value="">Einheit</option>
+          <option value="%">Prozent des aktuellen Vermögens</option>
+          <option value="x">Wurfpreisfaktor (WP)</option>
+        </select><br><span class="btn done">Einzahlen</span>
+      </div>
+      <div class="overlay" id="buydice">
+        <h1>Wurf kaufen</h1>
+        <p>Wenn du einen Wurf kaufen willst, um noch einmal zu würfeln, bestätige mit dem Button, <span class="playerholder" data-is-player="0"></span>?</p><span class="btn done">Kaufen</span>
+      </div>
+      <div class="overlay" id="buydiceresult">
+        <h1>Wurfergebnis kaufen</h1>
+        <p>Wenn du ein Wurfresultat kaufen willst, um eine beliebige Anzahl Felder zwischen 1 und 6 vorzurücken, klicke auf den Button um zu bestätigen,  <span class="playerholder" data-is-player="0"></span>?</p><br><span class="btn done">Kaufen</span>
+      </div>
+    </main>
     <div class="footer"><span>&copy; Myriam Frisano &middot; <a href="https://halfapx.com">halfapx.com</a></span> &middot; <span>Icons from The Noun Project (<a href="https://thenounproject.com/term/money/1447303/" target="_blank">Money by Yusuf Shuaib (adjusted)</a> &middot; <a href="https://thenounproject.com/term/clover/159353/" target="_blank">Clover by Marek Polakovic, SK (adjusted)</a>) Licenced under <a href="https://creativecommons.org/licenses/by/3.0/us/legalcode" target="_blank">CC 3.0</a> </span></div>
     <!-- development (do not ship this)-->
     <script src="js/json2.js"></script>
