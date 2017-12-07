@@ -340,7 +340,9 @@ $(document).ready(function(){
             if(p.lucky){
                 pl += '<span class="lucky">Glückspilz!</span>';
 
-                $('#data .luck').append('Würfelvorteil: '+p.name);
+                if($('#data .luck').text() == ''){
+                    $('#data .luck').append('Würfelvorteil: '+p.name);                    
+                }
             }
 
             pl += '<div class="player-head">'
